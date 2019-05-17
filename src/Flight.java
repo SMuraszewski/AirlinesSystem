@@ -9,19 +9,19 @@ public class Flight {
   private String arrival;
   private String arrival_code;
   private String departure_date;
-  private String arrival_date;
+  private String return_date;
   private int time;
   private int number_of_passengers;
   private double price;
 
 
-  public Flight(String departure, String departure_code, String arrival, String arrival_code, String departure_date, String arrival_date, int time, int number_of_passengers, double price) {
+  public Flight(String departure, String departure_code, String arrival, String arrival_code, String departure_date, String return_date, int time, int number_of_passengers, double price) {
     this.departure = departure;
     this.departure_code = departure_code;
     this.arrival = arrival;
     this.arrival_code = arrival_code;
     this.departure_date = departure_date;
-    this.arrival_date = arrival_date;
+    this.return_date = return_date;
     this.time = time;
     this.number_of_passengers = number_of_passengers;
     this.price = price;
@@ -67,12 +67,12 @@ public class Flight {
     this.departure_date = departure_date;
   }
 
-  public String getArrival_date() {
-    return arrival_date;
+  public String getReturn_date() {
+    return return_date;
   }
 
-  public void setArrival_date(String arrival_date) {
-    this.arrival_date = arrival_date;
+  public void setReturn_date(String return_date) {
+    this.return_date = return_date;
   }
 
   public int getTime() {
@@ -99,6 +99,17 @@ public class Flight {
     this.price = price;
   }
 
-
+  @Override
+  public String toString() {
+    return "Lot: \n" +
+            "Miejsce wylotu: " + departure + ' ' + departure_code + '\n' +
+            "Miejsce przylotu: " + arrival + ' ' + arrival_code + '\n' +
+            "Data wylotu: " + departure_date + '\n' +
+            "Data powrotu: " + return_date +  '\n' +
+            "Długość lotu: " + time + " h \n" +
+            "Liczba pasażerów: " + number_of_passengers + '\n' +
+            "Cena: " + price + " PLN\n" +
+            '\n';
+  }
 }
 
