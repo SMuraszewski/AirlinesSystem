@@ -2,6 +2,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+
 public class Flight {
 
   private String departure;
@@ -101,7 +102,7 @@ public class Flight {
 
   @Override
   public String toString() {
-    return "Lot: \n" +
+    return
             "Miejsce wylotu: " + departure + ' ' + departure_code + '\n' +
             "Miejsce przylotu: " + arrival + ' ' + arrival_code + '\n' +
             "Data wylotu: " + departure_date + '\n' +
@@ -111,5 +112,6 @@ public class Flight {
             "Cena: " + price + " PLN\n" +
             '\n';
   }
+
 }
 
