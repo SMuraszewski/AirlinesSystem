@@ -1,4 +1,7 @@
-
+import java.text.ParseException;
+import java.util.Date;
+import java.time.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class FlightList {
@@ -19,7 +22,7 @@ public class FlightList {
 
     Scanner scanner = new Scanner(System.in);
 
-    System.out.println("Witamy w systemie linii lotniczej 'Who says  sky is the limit?'");
+    System.out.println("Witamy w systemie linii lotniczej 'Who says sky is the limit?'");
     System.out.println("Mamy dla Ciebie pytania - wybierz za pomocą klawiszy, na które chcesz odpowiedzieć.");
     System.out.println("\n1. Skąd lecisz?");
     System.out.println("2. Kiedy chcesz lecieć?");
@@ -44,7 +47,7 @@ public class FlightList {
         break;
 
       case 2:
-        System.out.println("\nDobrze. Kiedy chcesz lecieć?");
+        System.out.println("\nDobrze. Kiedy chcesz lecieć? Wpisz datę w formacie dd-mm-yyyy.");
         String date = scanner.nextLine();
 
         listFlights.stream()
@@ -80,7 +83,7 @@ public class FlightList {
 
     System.out.println("Oto loty odpowiadające Twojemu zapytaniu:");
 
-    for(Map.Entry<Integer, Flight> entry: lista_lotow.entrySet()) {
+    for(Map.Entry<Integer, Flight> entry: lista_lotow.entrySet()) { //wyświetlenie lotów na ekranie
       Integer key = entry.getKey();
       Flight value = entry.getValue();
       System.out.println("Opcja " + key + ": " + "lot z lotniska " + value.getDeparture() + " do " + value.getArrival()  + " z datą wylotu " + value.getDeparture_date() + " i powrotem " + value.getReturn_date() + ", który potrwa " + value.getTime() + " h.");
@@ -97,11 +100,60 @@ public class FlightList {
             "\nData powrotu: " + chosen_flight.getReturn_date() +
             "\nDługość trwania lotu: " + chosen_flight.getTime() + " h");
 
-    //chosen_flight.getPrice()
-    //System.out.println();
+    Date data = Calendar.getInstance().getTime(); //pobranie dzisiejszej daty
+
+    try {
+      data = new SimpleDateFormat("dd-MM-yyyy").parse(chosen_flight.getDeparture_date()); //pobranie daty lotu
+    }
+    catch (ParseException exception){
+      System.out.println("Zły format daty.");
+      System.out.println("Wystąpił błąd w systemie.");
+      System.exit(0);
+    }
+
+    Date today = Calendar.getInstance().getTime(); //pobranie dzisiejszej daty
+
+    double total_price = day_of_week_price(chosen_flight.getPrice(), data);
+    total_price = date_of_departure_price(total_price, data, today);
+    total_price = number_of_passengers_price(total_price, chosen_flight.getNumber_of_passengers());
+
+    System.out.println(total_price);
+
+
+  }
+
+  public static double day_of_week_price(Double price, Date flight_date){
+    double new_price = price;
+    Calendar calendar = Calendar.getInstance(flight_date).get(Calendar.DAY_OF_WEEK);
+    if (flight_date.(Calendar.DAY_OF_WEEK) == 1){
+       new_price = price * 1.1;
+    }
+    return new_price;
+  }
+
+
+  public static double date_of_departure_price(Double price, Date flight_date, Date today_date){
+    price = (flight_date.compareTo(today_date) > 30) ? (price *= 0.9) : (price);
+    price = (flight_date.compareTo(today_date) < 7) ? (price *= 1.2) : (price);
+    return price;
+  }
+
+  public static double number_of_passengers_price(Double price, int passengers){
+    if ((100 - passengers) < 20) {
+      return price * 1.25;
+    }
+    else if((100 - passengers) < 50) {
+      return price * 1.1;
+    }
+    else {
+      return price;
+    }
+  }
 
   }
 
 
 
-}
+
+
+
