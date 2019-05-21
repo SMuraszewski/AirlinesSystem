@@ -40,10 +40,8 @@ public class FlightList {
 
         listFlights.stream()
                 .filter(flight -> flight.getDeparture().equals(place)) //filtrowanie miejsca wylotu
-                //.map(flight -> "* lot z lotniska " + flight.getDeparture() + " do " + flight.getArrival()   + " z datą wylotu " + flight.getDeparture_date() + " i powrotem " + flight.getReturn_date() + ", który potrwa " + flight.getTime() + " godziny.")
                 .forEach(lot::add);
 
-                //.forEach(System.out::println);
         break;
 
       case 2:
@@ -53,8 +51,7 @@ public class FlightList {
         listFlights.stream()
                 .filter(flight -> flight.getDeparture_date().equals(date)) //filtrowanie daty wylotu
                 .forEach(lot::add);
-                //.map(flight -> "* lot z lotniska " + flight.getDeparture() + " do " + flight.getArrival()   + " z datą wylotu " + flight.getDeparture_date() + " i powrotem " + flight.getReturn_date() + ", który potrwa " + flight.getTime() + " godziny.")
-                //.forEach(System.out::println);
+
         break;
 
       case 3:
@@ -64,8 +61,7 @@ public class FlightList {
         listFlights.stream()
                 .filter(flight -> flight.getPrice() <= price) //filtrowanie ceny lotu
                 .forEach(lot::add);
-                //.map(flight -> "* lot z lotniska " + flight.getDeparture() + " do " + flight.getArrival()   + " z datą wylotu " + flight.getDeparture_date() + " i powrotem " + flight.getReturn_date() + ", który potrwa " + flight.getTime() + " godziny.")
-                //.forEach(System.out::println);
+
         break;
       default:
         System.out.println("Wprowadzono błędne dane.");
@@ -113,7 +109,7 @@ public class FlightList {
 
     Date today = Calendar.getInstance().getTime(); //pobranie dzisiejszej daty
 
-    double total_price = day_of_week_price(chosen_flight.getPrice(), data);
+   double total_price = day_of_week_price(chosen_flight.getPrice(), data);
     total_price = date_of_departure_price(total_price, data, today);
     total_price = number_of_passengers_price(total_price, chosen_flight.getNumber_of_passengers());
 
@@ -124,16 +120,18 @@ public class FlightList {
 
   public static double day_of_week_price(Double price, Date flight_date){
     double new_price = price;
-    Calendar calendar = Calendar.getInstance(flight_date).get(Calendar.DAY_OF_WEEK);
-    if (flight_date.(Calendar.DAY_OF_WEEK) == 1){
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(flight_date); //pobranie daty lotu
+    if (calendar.get(Calendar.DAY_OF_WEEK) == 1){ //sprawdzenie, czy dzień lotu to niedziela
        new_price = price * 1.1;
     }
     return new_price;
   }
 
 
+
   public static double date_of_departure_price(Double price, Date flight_date, Date today_date){
-    price = (flight_date.compareTo(today_date) > 30) ? (price *= 0.9) : (price);
+    price = (flight_date.compareTo(today_date) > 30) ? (price *= 0.9) : (price); //sprawdzenie liczby dni do odlotu za pomocą operatora warunkowego
     price = (flight_date.compareTo(today_date) < 7) ? (price *= 1.2) : (price);
     return price;
   }
