@@ -39,7 +39,7 @@ public class FlightList {
         String place = scanner.nextLine();
 
         listFlights.stream()
-                .filter(flight -> flight.getDeparture().equals(place)) //filtrowanie miejsca wylotu
+                .filter(flight -> flight.getDeparture().contains(place)) //filtrowanie miejsca wylotu
                 .forEach(lot::add);
 
         break;
@@ -67,8 +67,9 @@ public class FlightList {
         System.out.println("Wprowadzono błędne dane.");
     }
 
-    if(lot == null){ // wykonuje się w momencie niespełnienia warunków przez żaden lot
-      System.out.println("Niestety nie znaleziono lotu o pożądanych przez Panią/Pana parametrach. Dziękujemy za skorzystanie z systemu i życzymy miłego dnia.");
+    if(lot.isEmpty()){ // wykonuje się w momencie niespełnienia warunków przez żaden lot
+      System.out.println("\nNiestety nie znaleziono lotu o pożądanych przez Panią/Pana parametrach. Dziękujemy za skorzystanie z systemu i życzymy miłego dnia.");
+      System.exit(0);
     }
 
     Map<Integer, Flight> lista_lotow = new HashMap<>(); //utworzenie mapy z indeksem wybranych lotów, żeby wyświetlić indeksy przy lotach i umożliwić użytkownikowi wybór lotu
@@ -110,11 +111,35 @@ public class FlightList {
     Date today = Calendar.getInstance().getTime(); //pobranie dzisiejszej daty
 
    double total_price = day_of_week_price(chosen_flight.getPrice(), data);
-    total_price = date_of_departure_price(total_price, data, today);
-    total_price = number_of_passengers_price(total_price, chosen_flight.getNumber_of_passengers());
+   total_price = date_of_departure_price(total_price, data, today);
+   total_price = number_of_passengers_price(total_price, chosen_flight.getNumber_of_passengers());
 
-    System.out.println(total_price);
+   System.out.println("Cena Twojego lotu wynosi " + total_price + " PLN.");
+   System.out.println("Chcesz wybrać bilet w klasie biznes? Będzie się to wiązało z dopłatą w wysokości 65% podanej wcześniej ceny.");
+   System.out.println("Napisz 'tak', jeśli się zgadzasz.");
 
+   Boolean business_ticket = false;
+
+   String agreement = scanner.nextLine();
+
+   if(agreement.equals("tak")){
+     business_ticket = true;
+     total_price *= 1.65;
+   }
+
+   System.out.println("Ile biletów chcesz kupić?");
+   int number_of_tickets = scanner.nextInt();
+   int total_number = chosen_flight.getNumber_of_passengers() + number_of_tickets;
+
+   group_price_of_tickets(number_of_tickets, total_price, chosen_flight.getNumber_of_passengers());
+   /*
+   try {
+     if() {
+       group_price_of_tickets(number_of_tickets, total_price, chosen_flight.getNumber_of_passengers());
+     }
+   }
+   catch (Exception overbooking)
+   */
 
   }
 
@@ -130,23 +155,69 @@ public class FlightList {
 
 
 
+
   public static double date_of_departure_price(Double price, Date flight_date, Date today_date){
     price = (flight_date.compareTo(today_date) > 30) ? (price *= 0.9) : (price); //sprawdzenie liczby dni do odlotu za pomocą operatora warunkowego
     price = (flight_date.compareTo(today_date) < 7) ? (price *= 1.2) : (price);
     return price;
   }
 
-  public static double number_of_passengers_price(Double price, int passengers){
+  public static double number_of_passengers_price(Double price, int passengers) {
     if ((100 - passengers) < 20) {
       return price * 1.25;
-    }
-    else if((100 - passengers) < 50) {
+    } else if ((100 - passengers) < 50) {
       return price * 1.1;
-    }
-    else {
+    } else {
       return price;
     }
+
   }
+
+  public static double group_price_of_tickets(int new_passengers, Double price, int passengers) throws {
+      double group_price;
+      Scanner scanner = new Scanner(System.in);
+
+      if()
+
+      if(new_passengers + passengers > 100){
+        System.out.println("Niestety liczba pasażerów jest za duża. Ale zawsze możesz polecieć jako steward/stewardessa z 20% zniżką.");
+        int stewards = (new_passengers + passengers) - 100;
+        group_price = (stewards * (price * 0.8)) + ((new_passengers - stewards) * price);
+
+        System.out.println("Tylu pasażerów poleci w roli stewardów:" + stewards);
+        System.out.println("Oto ostateczna cena:" + group_price + " PLN");
+        System.out.println("Zgadasz się na tą propozycję? Jeśli tak, to napisz 'tak'. Jeśli nie, to napisz 'nie'");
+
+        String agreement = scanner.nextLine();
+        if (agreement.equals("tak")){
+          return group_price;
+        }
+        if(agreement.equals("nie")){
+          System.out.println("Dobrze. W takim razie jest jeszcze jedna opcja. Miejsce na skrzydle z 50% zniżką.");
+          group_price = (stewards * (price * 0.5)) + ((new_passengers - stewards) * price);
+
+          System.out.println("Tylu pasażerów poleci na skrzydle:" + stewards);
+          System.out.println("Oto ostateczna cena:" + group_price + " PLN");
+          System.out.println("Zgadasz się na tą propozycję? Jeśli tak, to napisz 'tak'. Jeśli nie, to napisz 'nie'");
+
+          if (agreement.equals("tak")){
+            return group_price;
+          }
+          if (agreement.equals("nie")){
+            System.out.println("Niestety nie ma możliwości kupna biletów dla tylu osób. Dziękujemy za skorzystanie z systemu.");
+            System.exit(0);
+          }
+
+        }
+
+      else{
+        return group_price;
+        }
+
+      }
+    }
+
+
 
   }
 
