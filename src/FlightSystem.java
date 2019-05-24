@@ -157,7 +157,7 @@ public class FlightSystem {
    BigDecimal round_price = currency_price.setScale(2, RoundingMode.HALF_DOWN); //zaokrąglanie ceny
 
    String t_price = round_price.toString();
-   String ticket_price = t_price.replaceAll("\\.", ",");
+   String ticket_price = t_price.replaceAll("\\.", ","); //zamiana kropki w cenie na przecinek
 
    String start_date = chosen_flight.getDeparture_date().replaceAll("-","."); //zamienianie myślników w datach na kropki
    String ret_date = chosen_flight.getReturn_date().replaceAll("-", ".");
